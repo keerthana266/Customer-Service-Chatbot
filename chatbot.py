@@ -41,3 +41,6 @@ ensure_nltk()
 
 stop_words = set(stopwords.words('english'))
 lemmatizer = WordNetLemmatizer()
+
+def get_response(user_message):
+    return "Chatbot is live 🚀"
