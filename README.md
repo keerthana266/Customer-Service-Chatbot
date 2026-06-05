@@ -7,7 +7,7 @@ It can answer basic customer queries like orders, refunds, products, and pricing
 
 ## Live Demo
 
-https://your-live-link-here.onrender.com
+https://customer-chatbot-e56j.onrender.com
 
 ---
 ## Project Overview
