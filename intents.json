@@ -2,167 +2,28 @@
   "intents": [
     {
       "tag": "greeting",
-      "patterns": [
-        "hi",
-        "hello",
-        "hey",
-        "good morning",
-        "good evening",
-        "how are you",
-        "what's up"
-      ],
-      "responses": [
-        "Hello! How can I help you today?",
-        "Hi there! What can I do for you?",
-        "Welcome! How may I assist you?"
-      ]
+      "patterns": ["hello", "hi", "hey", "good morning", "good evening"],
+      "responses": ["Hello!", "Hi there!", "Hey! How can I help you?"]
     },
-
+    {
+      "tag": "orders",
+      "patterns": ["order", "track order", "my order", "order status"],
+      "responses": ["You can track your orders in the Orders section."]
+    },
     {
       "tag": "refund",
-      "patterns": [
-        "refund",
-        "money back",
-        "return product",
-        "return item",
-        "refund request",
-        "cancel my order",
-        "get my money back",
-        "refund my order",
-        "return my purchase",
-        "request a refund",
-        "how do i get a refund",
-        "refund status",
-        "return an order"
-      ],
-      "responses": [
-        "Refunds are processed within 5-7 business days.",
-        "Your refund request will be reviewed and processed shortly."
-      ]
+      "patterns": ["refund", "refund policy", "money back", "return"],
+      "responses": ["Refunds are processed within 5–7 business days."]
     },
-
     {
-      "tag": "contact",
-      "patterns": [
-        "contact support",
-        "customer care",
-        "help desk",
-        "talk to support",
-        "customer service",
-        "contact us",
-        "support email",
-        "support number"
-      ],
-      "responses": [
-        "You can contact us at support@example.com.",
-        "Our support team is available at support@example.com."
-      ]
+      "tag": "products",
+      "patterns": ["products", "what do you sell", "items", "catalog"],
+      "responses": ["We offer electronics, clothing, and accessories."]
     },
-
-    {
-      "tag": "hours",
-      "patterns": [
-        "working hours",
-        "timing",
-        "office timing",
-        "when are you open",
-        "business hours",
-        "opening hours",
-        "working time"
-      ],
-      "responses": [
-        "We are open Monday to Saturday, 9 AM to 6 PM."
-      ]
-    },
-
-    {
-      "tag": "order_tracking",
-      "patterns": [
-        "track my order",
-        "order status",
-        "where is my order",
-        "track order",
-        "shipment status"
-      ],
-      "responses": [
-        "Please provide your Order ID. Example: Track order 1001"
-      ]
-    },
-
     {
       "tag": "pricing",
-      "patterns": [
-        "price",
-        "pricing",
-        "cost",
-        "how much does it cost",
-        "product price",
-        "service charges",
-        "subscription price"
-      ],
-      "responses": [
-        "Our pricing depends on the service. Please visit the pricing page."
-      ]
-    },
-
-    {
-      "tag": "delivery",
-      "patterns": [
-        "delivery time",
-        "shipping time",
-        "when will my order arrive",
-        "delivery status",
-        "expected delivery"
-      ],
-      "responses": [
-        "Most orders are delivered within 3-7 business days."
-      ]
-    },
-
-    {
-      "tag": "payment",
-      "patterns": [
-        "payment methods",
-        "how can i pay",
-        "accepted payments",
-        "credit card",
-        "upi payment",
-        "debit card"
-      ],
-      "responses": [
-        "We accept UPI, Debit Cards, Credit Cards, and Net Banking."
-      ]
-    },
-
-    {
-      "tag": "thanks",
-      "patterns": [
-        "thank you",
-        "thanks",
-        "thanks a lot",
-        "appreciate it"
-      ],
-      "responses": [
-        "You're welcome!",
-        "Happy to help!",
-        "Glad I could assist."
-      ]
-    },
-
-    {
-      "tag": "goodbye",
-      "patterns": [
-        "bye",
-        "goodbye",
-        "see you",
-        "talk later",
-        "catch you later"
-      ],
-      "responses": [
-        "Goodbye! Have a great day!",
-        "See you soon!",
-        "Take care!"
-      ]
+      "patterns": ["price", "pricing", "cost", "how much"],
+      "responses": ["Prices depend on the product type."]
     }
   ]
 }
