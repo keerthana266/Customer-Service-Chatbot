@@ -42,7 +42,7 @@ for intent in intents["intents"]:
 # -----------------------
 # TF-IDF MODEL
 # -----------------------
-vectorizer = TfidfVectorizer()
+vectorizer = TfidfVectorizer(ngram_range=(1, 2))
 X = vectorizer.fit_transform(all_patterns)
 
 
@@ -59,7 +59,7 @@ def get_response(user_message):
     score = similarity[0][index]
 
     # confidence threshold
-    if score < 0.2:
+    if score < 0.15:
         return "Sorry, I didn't understand that."
 
     tag = tag_map[index]
