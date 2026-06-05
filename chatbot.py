@@ -10,7 +10,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 # -----------------------
-# NLTK SETUP (Render safe)
+# NLTK SETUP
 # -----------------------
 nltk.download('stopwords')
 nltk.download('punkt')
@@ -35,34 +35,41 @@ tag_map = []
 
 for intent in intents["intents"]:
     for pattern in intent["patterns"]:
-        all_patterns.append(pattern)
+        all_patterns.append(pattern.lower())
         tag_map.append(intent["tag"])
 
 
 # -----------------------
-# TF-IDF MODEL
+# TF-IDF MODEL (IMPROVED)
 # -----------------------
-vectorizer = TfidfVectorizer(ngram_range=(1, 2))
+vectorizer = TfidfVectorizer(ngram_range=(1, 3), lowercase=True)
 X = vectorizer.fit_transform(all_patterns)
 
 
 # -----------------------
-# GET RESPONSE FUNCTION
+# CHATBOT RESPONSE ENGINE
 # -----------------------
 def get_response(user_message):
     user_message = user_message.lower()
 
     user_vec = vectorizer.transform([user_message])
-    similarity = cosine_similarity(user_vec, X)
+    similarity = cosine_similarity(user_vec, X)[0]
 
-    index = similarity.argmax()
-    score = similarity[0][index]
+    # top 2 matches
+    top_indices = similarity.argsort()[-2:][::-1]
 
-    # confidence threshold
-    if score < 0.15:
+    best_score = similarity[top_indices[0]]
+    second_score = similarity[top_indices[1]]
+
+    # confidence check
+    if best_score < 0.25:
         return "Sorry, I didn't understand that."
 
-    tag = tag_map[index]
+    # avoid wrong intent confusion
+    if best_score - second_score < 0.05:
+        return "Can you please rephrase that?"
+
+    tag = tag_map[top_indices[0]]
 
     for intent in intents["intents"]:
         if intent["tag"] == tag:
