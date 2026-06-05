@@ -39,9 +39,10 @@ for intent in intents["intents"]:
 # IMPROVED TF-IDF MODEL
 # -----------------------
 vectorizer = TfidfVectorizer(
-    ngram_range=(1, 3),
+    ngram_range=(1, 4),
     lowercase=True,
-    stop_words="english"
+    stop_words="english",
+    sublinear_tf=True
 )
 
 X = vectorizer.fit_transform(patterns)
