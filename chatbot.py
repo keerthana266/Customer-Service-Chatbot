@@ -42,7 +42,7 @@ for intent in intents["intents"]:
 # -----------------------
 # TF-IDF MODEL (IMPROVED)
 # -----------------------
-vectorizer = TfidfVectorizer(ngram_range=(1, 4), lowercase=True)
+vectorizer = TfidfVectorizer(ngram_range=(1, 4), lowercase=True, stop_words="english")
 X = vectorizer.fit_transform(all_patterns)
 
 
@@ -62,7 +62,7 @@ def get_response(user_message):
     second_score = similarity[top_indices[1]]
 
     # confidence check
-    if best_score < 0.22:
+    if best_score < 0.18:
         return "Sorry, I didn't understand that."
 
     # avoid wrong intent confusion
