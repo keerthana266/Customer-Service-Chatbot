@@ -5,7 +5,7 @@
       "patterns": ["hello", "hi", "hey", "good morning", "good evening"],
       "responses": ["Hello!", "Hi there!", "Hey! How can I help you?"]
     },
-    {
+        {
       "tag": "orders",
       "patterns": [
         "order",
@@ -14,17 +14,14 @@
         "track order",
         "track my order",
         "order status",
-        "give info about orders",
-        "what about my order",
         "i want to know about orders",
         "can you tell me about orders",
-        "tell me something about my order",
-        "give details about my order"
+        "give info about orders"
       ],
       "responses": [
         "You can track your orders in the Orders section.",
-        "Go to Orders page to check status.",
-        "Your order details are available in your account."
+        "Your order details are available in your account.",
+        "Go to Orders page to check status."
       ]
     },
     {

@@ -4,7 +4,6 @@ import nltk
 import numpy as np
 
 from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -13,11 +12,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 # NLTK SETUP
 # -----------------------
 nltk.download('stopwords')
-nltk.download('punkt')
-nltk.download('wordnet')
 
 stop_words = set(stopwords.words('english'))
-lemmatizer = WordNetLemmatizer()
 
 
 # -----------------------
@@ -30,20 +26,25 @@ with open("intents.json", "r") as file:
 # -----------------------
 # PREPARE DATA
 # -----------------------
-all_patterns = []
-tag_map = []
+patterns = []
+tags = []
 
 for intent in intents["intents"]:
-    for pattern in intent["patterns"]:
-        all_patterns.append(pattern.lower())
-        tag_map.append(intent["tag"])
+    for p in intent["patterns"]:
+        patterns.append(p.lower())
+        tags.append(intent["tag"])
 
 
 # -----------------------
-# TF-IDF MODEL (IMPROVED)
+# IMPROVED TF-IDF MODEL
 # -----------------------
-vectorizer = TfidfVectorizer(ngram_range=(1, 4), lowercase=True, stop_words="english")
-X = vectorizer.fit_transform(all_patterns)
+vectorizer = TfidfVectorizer(
+    ngram_range=(1, 3),
+    lowercase=True,
+    stop_words="english"
+)
+
+X = vectorizer.fit_transform(patterns)
 
 
 # -----------------------
@@ -55,24 +56,29 @@ def get_response(user_message):
     user_vec = vectorizer.transform([user_message])
     similarity = cosine_similarity(user_vec, X)[0]
 
-    # top 2 matches
-    top_indices = similarity.argsort()[-2:][::-1]
+    best_index = np.argmax(similarity)
+    best_score = similarity[best_index]
 
-    best_score = similarity[top_indices[0]]
-    second_score = similarity[top_indices[1]]
+    # real confidence score (0–100%)
+    confidence = round(best_score * 100, 2)
 
-    # confidence check
+    # stricter threshold (better accuracy)
     if best_score < 0.18:
-        return "Sorry, I didn't understand that."
+        return {
+            "message": "Sorry, I didn't understand that. Can you rephrase?",
+            "confidence": confidence
+        }
 
-    # avoid wrong intent confusion
-    if best_score - second_score < 0.05:
-        return "Can you please rephrase that?"
-
-    tag = tag_map[top_indices[0]]
+    tag = tags[best_index]
 
     for intent in intents["intents"]:
         if intent["tag"] == tag:
-            return random.choice(intent["responses"])
+            return {
+                "message": random.choice(intent["responses"]),
+                "confidence": confidence
+            }
 
-    return "Sorry, I didn't understand that."
+    return {
+        "message": "Sorry, I didn't understand that.",
+        "confidence": confidence
+    }
