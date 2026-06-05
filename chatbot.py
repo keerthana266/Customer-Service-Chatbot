@@ -4,6 +4,7 @@ import nltk
 import numpy as np
 
 from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -12,8 +13,20 @@ from sklearn.metrics.pairwise import cosine_similarity
 # NLTK SETUP
 # -----------------------
 nltk.download('stopwords')
+nltk.download('wordnet')
 
 stop_words = set(stopwords.words('english'))
+lemmatizer = WordNetLemmatizer()
+
+
+# -----------------------
+# TEXT PREPROCESSING
+# -----------------------
+def preprocess(text):
+    text = text.lower()
+    words = text.split()
+    words = [lemmatizer.lemmatize(w) for w in words]
+    return " ".join(words)
 
 
 # -----------------------
@@ -31,12 +44,13 @@ tags = []
 
 for intent in intents["intents"]:
     for p in intent["patterns"]:
-        patterns.append(p.lower())
+        cleaned = preprocess(p)
+        patterns.append(cleaned)
         tags.append(intent["tag"])
 
 
 # -----------------------
-# IMPROVED TF-IDF MODEL
+# TF-IDF MODEL (IMPROVED)
 # -----------------------
 vectorizer = TfidfVectorizer(
     ngram_range=(1, 4),
@@ -49,10 +63,10 @@ X = vectorizer.fit_transform(patterns)
 
 
 # -----------------------
-# CHATBOT RESPONSE ENGINE
+# CHATBOT ENGINE
 # -----------------------
 def get_response(user_message):
-    user_message = user_message.lower()
+    user_message = preprocess(user_message)
 
     user_vec = vectorizer.transform([user_message])
     similarity = cosine_similarity(user_vec, X)[0]
@@ -60,10 +74,9 @@ def get_response(user_message):
     best_index = np.argmax(similarity)
     best_score = similarity[best_index]
 
-    # real confidence score (0–100%)
     confidence = round(best_score * 100, 2)
 
-    # stricter threshold (better accuracy)
+    # fallback condition
     if best_score < 0.18:
         return {
             "message": "Sorry, I didn't understand that. Can you rephrase?",

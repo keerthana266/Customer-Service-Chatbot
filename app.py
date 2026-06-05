@@ -4,35 +4,17 @@ import os
 
 app = Flask(__name__)
 
-
 @app.route("/")
 def home():
     return render_template("index.html")
 
-
 @app.route("/chat", methods=["POST"])
 def chat():
-    try:
-        data = request.get_json()
-        user_message = data.get("message", "").strip()
+    data = request.get_json()
+    user_message = data.get("message", "")
 
-        if not user_message:
-            return jsonify({
-                "message": "Please enter a message.",
-                "confidence": 0
-            })
-
-        result = get_response(user_message)
-
-        return jsonify(result)
-
-    except Exception as e:
-        return jsonify({
-            "message": "Server error. Please try again.",
-            "confidence": 0,
-            "error": str(e)
-        })
-
+    result = get_response(user_message)
+    return jsonify(result)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
